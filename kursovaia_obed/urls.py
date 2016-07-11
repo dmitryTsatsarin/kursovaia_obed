@@ -18,6 +18,7 @@ from django.contrib import admin
 from lunch_maker.views import *
 
 urlpatterns = [
+    url(r'^new_order/$', new_order, name='new_order'),
     url(r'^admin/', admin.site.urls),
     url(r'^$', go_main, name='go_main'),
 ]

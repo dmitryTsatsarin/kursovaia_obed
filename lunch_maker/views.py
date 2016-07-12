@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from models import Order
 from forms import OrderForm
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -31,7 +32,7 @@ def new_order(request):
         context = {'my_form':OrderForm()}
         return render(request, 'new_order_page.html', context)
 
-
+@login_required(login_url='/accounts/login/')
 def show(request):
     data = Order.objects.filter().values()
     result_byn = 0

@@ -30,3 +30,8 @@ def new_order(request):
     else:
         context = {'my_form':OrderForm()}
         return render(request, 'new_order_page.html', context)
+
+
+def show(request):
+    context = {'data':Order.objects.filter()}
+    return render(request, 'show_page.html', context)

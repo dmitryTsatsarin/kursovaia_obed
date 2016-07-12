@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Просмотр заказов</title>
+</head>
+<body>
+<table border="1" cellpadding="9">
+    <tr>
+        <td><b>Что купить</b></td>
+        <td><b>Кому</b></td>
+        <td><b>Оплачено BYN</b></td>
+        <td><b>Оплачено BYR</b></td>
+        <td><b>Комментарий</b></td>
+    </tr>
+    {% for i in data %}
+        <tr>
+        <td>{{ i.meal }}</td>
+        <td>{{ i.person }}</td>
+
+        {% if i.byn == None %}
+        <td></td>
+        {% else %}
+        <td>{{ i.byn }}</td>
+        {% endif %}
+
+        {% if i.byr == None %}
+        <td></td>
+        {% else %}
+        <td>{{ i.byr }}</td>
+        {% endif %}
+
+        <td>{{ i.comment }}</td>
+        </tr>
+    {% endfor %}
+</table>
+</body>
+</html>

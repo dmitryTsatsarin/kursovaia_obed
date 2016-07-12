@@ -11,3 +11,6 @@ class Order(models.Model):
     byn = models.FloatField(null=True)
     byr = models.IntegerField(null=True)
     comment = models.CharField(max_length=1000000)
+
+    def __unicode__(self):
+        return "{0} {1}".format(self.meal, self.person)

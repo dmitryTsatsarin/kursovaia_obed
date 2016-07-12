@@ -5,6 +5,12 @@
     <title>Новый заказ</title>
 </head>
 <body>
-
+<form method="post" action="{% url 'new_order' %}">
+    {{ my_form.as_p }}
+    {% csrf_token %}
+    <br>
+    <br>
+    <input type="submit" value="оформить">
+</form>
 </body>
 </html>

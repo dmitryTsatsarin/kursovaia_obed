@@ -62,6 +62,31 @@ def delete(request):
 @login_required(login_url='/accounts/login/')
 def change(request):
     if request.method == "POST":
-        pass
+        if request.POST.get('change'):
+            change_id = request.POST.get('change')
+            order = Order.objects.filter(id=change_id).get()
+            data = {'meal':order.meal, 'person':order.person, 'email':order.email, 'byn':order.byn,
+                    'byr':order.byr, 'comment':order.comment}
+            context = {'my_form':OrderForm(data)}
+            request.session['change_id'] = change_id
+            return render(request, 'change_page.html', context)
+        if request.session.has_key('change_id'):
+            form = OrderForm(request.POST)
+            if form.is_valid():
+                data = form.cleaned_data
+                order = Order.objects.filter(id=request.session.get('change_id')).get()
+                order.meal = data['meal']
+                order.person = data['person']
+                order.email = data['email']
+                order.byn = data['byn']
+                order.byr = data['byr']
+                order.comment = data['comment']
+                order.save()
+                del request.session['change_id']
+                return redirect(show)
+            else:
+                data = form.errors
+                return HttpResponse("{0}".format(data))
     else:
-        return render(request)
+        context = {'data':Order.objects.filter(), 'step':1}
+        return render(request, 'change_page.html', context)

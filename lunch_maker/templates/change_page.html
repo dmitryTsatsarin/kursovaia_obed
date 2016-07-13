@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Изменить заказ</title>
+</head>
+<body>
+<form method="post" action="{% url 'change' %}">
+{% if step == 1 %}
+    <select size="3" name="change">
+        {% for i in data %}
+            <option value="{{ i.id }}">{{ i.meal }}&nbsp;{{ i.person }}</option>
+        {% endfor %}
+    </select>
+    <br>
+    <br>
+    {% csrf_token %}
+    <input type="submit" value="выбрать">
+{% else %}
+    {{ my_form.as_p }}
+    {% csrf_token %}
+    <br>
+    <br>
+    <input type="submit" value="изменить данные">
+{% endif %}
+</form>
+</body>
+</html>

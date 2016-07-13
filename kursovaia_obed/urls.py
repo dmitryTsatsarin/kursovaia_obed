@@ -20,6 +20,8 @@ from lunch_maker.views import *
 urlpatterns = [
     url(r'^new_order/$', new_order, name='new_order'),
     url(r'^show/$', show, name='show'),
+    url(r'^delete/$', delete, name='delete'),
+    url(r'^change/$', change, name='change'),
     url(r'^accounts/', include('django.contrib.auth.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^$', go_main, name='go_main'),

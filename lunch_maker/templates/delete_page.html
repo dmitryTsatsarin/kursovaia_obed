@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Удаление заказа</title>
+</head>
+<body>
+<form action="{% url 'delete' %}" method="post">
+    <select size="3" name="delete">
+        {% for i in data %}
+            <option value="{{ i.id }}">{{ i.meal }}&nbsp;{{ i.person }}</option>
+        {% endfor %}
+    </select>
+    <br>
+    <br>
+    {% csrf_token %}
+    <input type="submit" value="удалить">
+</form>
+</body>
+</html>

@@ -46,3 +46,22 @@ def show(request):
     result = result_byr/10000 + result_byn
     context = {'data':data, 'result_byn':result_byn, 'result_byr':result_byr, 'result':result}
     return render(request, 'show_page.html', context)
+
+
+@login_required(login_url='/accounts/login/')
+def delete(request):
+    if request.method == "POST":
+        delete_id = request.POST.get('delete')
+        Order.objects.filter(id=delete_id).delete()
+        return redirect(show)
+    else:
+        context = {'data':Order.objects.filter()}
+        return render(request, 'delete_page.html', context)
+
+
+@login_required(login_url='/accounts/login/')
+def change(request):
+    if request.method == "POST":
+        pass
+    else:
+        return render(request)

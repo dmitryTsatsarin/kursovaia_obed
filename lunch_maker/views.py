@@ -4,6 +4,7 @@ from models import Order
 from forms import OrderForm
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 
 # Create your views here.
 
@@ -52,6 +53,8 @@ def show(request):
 def delete(request):
     if request.method == "POST":
         delete_id = request.POST.get('delete')
+        send_mail('delete', ''.format(delete_id), 'testdjango31@gmail.com', ['headmaster11@yandex.ru'],
+                  fail_silently=False)
         Order.objects.filter(id=delete_id).delete()
         return redirect(show)
     else:

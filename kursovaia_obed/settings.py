@@ -71,11 +71,13 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'kursovaia_obed.wsgi.application'
+
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'testdjango31@gmail.com'
 EMAIL_HOST_PASSWORD = 'django12345678'
 EMAIL_PORT = 587
+ADMINS = (('admin', 'testdjango31@gmail.com'),)
 
 
 # Database

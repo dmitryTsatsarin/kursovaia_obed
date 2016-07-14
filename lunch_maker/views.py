@@ -4,7 +4,7 @@ from models import Order
 from forms import OrderForm
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
+from django.core.mail import send_mail, mail_admins
 import datetime
 
 # Create your views here.
@@ -26,12 +26,24 @@ def new_order(request):
             comment = data['comment']
             if byn is None and byr is None:
                 return HttpResponse("мы работаем только по предоплате")
+            d_now = datetime.datetime.now().time()
+            d1 = datetime.time(hour=13)
+            d2 = datetime.time(hour=15)
+            if d1 <= d_now <= d2:
+                mail_admins('заказ', 'получен новый заказ', fail_silently=False)
+            else:
+                return HttpResponse('error, sorry')
             Order.objects.create(meal=meal, person=person, email=email, byn=byn, byr=byr, comment=comment)
             return redirect(go_main)
         data = form.errors
         return HttpResponse("{0}".format(data))
     else:
-        context = {'my_form':OrderForm()}
+        d_now = datetime.datetime.now().time()
+        d1 = datetime.time(hour=15)
+        if d1 < d_now:
+            context = {'my_form': OrderForm(), 'state':'off'}
+        else:
+            context = {'my_form':OrderForm()}
         return render(request, 'new_order_page.html', context)
 
 @login_required(login_url='/accounts/login/')

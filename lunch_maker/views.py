@@ -30,9 +30,9 @@ def new_order(request):
             d1 = datetime.time(hour=13)
             d2 = datetime.time(hour=15)
             if d1 <= d_now <= d2:
-                mail_admins('заказ', 'получен новый заказ', fail_silently=False)
+                mail_admins(u'заказ', u'получен новый заказ', fail_silently=False)
             else:
-                return HttpResponse('error, sorry')
+                return HttpResponse('error, sorry') #что делать со временем раньше 13
             Order.objects.create(meal=meal, person=person, email=email, byn=byn, byr=byr, comment=comment)
             return redirect(go_main)
         data = form.errors
@@ -67,7 +67,7 @@ def delete(request):
     if request.method == "POST":
         delete_id = request.POST.get('delete')
         order = Order.objects.filter(id=delete_id).get()
-        send_mail('изменения в заказе', u'{0}, ваш заказ удален'.format(order.person),
+        send_mail(u'изменения в заказе', u'{0}, ваш заказ удален'.format(order.person),
                   'testdjango31@gmail.com', ['{0}'.format(order.email)], fail_silently=False)
         Order.objects.filter(id=delete_id).delete()
         return redirect(show)
@@ -90,7 +90,7 @@ def change(request):
         if request.session.has_key('change_id'):
             form = OrderForm(request.POST)
             if form.is_valid():
-                data = form.cleaned_data
+                data = form.cleaned_data #что можно менять
                 order = Order.objects.filter(id=request.session.get('change_id')).get()
                 order.meal = data['meal']
                 order.person = data['person']
@@ -99,7 +99,7 @@ def change(request):
                 order.byr = data['byr']
                 order.comment = data['comment']
                 order.save()
-                send_mail('изменения в заказе', u'{0} {1}'.format(order.meal, order.comment),
+                send_mail(u'изменения в заказе', u'{0} {1}'.format(order.meal, order.comment),
                           'testdjango31@gmail.com', ['{0}'.format(order.email)], fail_silently=False)
                 del request.session['change_id']
                 return redirect(show)

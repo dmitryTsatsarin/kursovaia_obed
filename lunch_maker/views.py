@@ -87,6 +87,8 @@ def change(request):
                 order.byr = data['byr']
                 order.comment = data['comment']
                 order.save()
+                send_mail('изменения в заказе', u'{0} {1}'.format(order.meal, order.comment),
+                          'testdjango31@gmail.com', ['{0}'.format(order.email)], fail_silently=False)
                 del request.session['change_id']
                 return redirect(show)
             else:

@@ -48,6 +48,8 @@ def new_order(request):
 
 @login_required(login_url='/accounts/login/')
 def show(request):
+    if request.session.has_key('change_id'):
+        del request.session['change_id']
     data = Order.objects.filter().values()
     result_byn = 0
     result_byr = 0
@@ -66,7 +68,10 @@ def show(request):
 def delete(request):
     if request.method == "POST":
         delete_id = request.POST.get('delete')
-        order = Order.objects.filter(id=delete_id).get()
+        try:
+            order = Order.objects.filter(id=delete_id).get()
+        except:
+            return HttpResponse("выберите заказ из списка")
         send_mail(u'изменения в заказе', u'{0}, ваш заказ удален'.format(order.person),
                   'testdjango31@gmail.com', ['{0}'.format(order.email)], fail_silently=False)
         Order.objects.filter(id=delete_id).delete()
@@ -106,6 +111,9 @@ def change(request):
             else:
                 data = form.errors
                 return HttpResponse("{0}".format(data))
+        else:
+            return HttpResponse('либо вы не выбрали заказ из списка<br>'
+                                'либо обратитесь к администратору')
     else:
         context = {'data':Order.objects.filter(), 'step':1}
         return render(request, 'change_page.html', context)

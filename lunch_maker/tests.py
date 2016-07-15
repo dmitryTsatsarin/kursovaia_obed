@@ -3,12 +3,19 @@ from django.test import TestCase
 from models import Order
 from mock import patch
 from django.contrib.auth.models import User
+import json
+from django.http import HttpResponse
 
 # Create your tests here.
 
 
 def new_send_mail(a, b, c, d, fail_silently=False):
     pass
+
+
+def new_render(a, b, c):
+    result = json.dumps(c)
+    return HttpResponse(result)
 
 
 class OrderTest(TestCase):
@@ -58,3 +65,16 @@ class OrderTest(TestCase):
             self.client.post('/change/', data1)
             order = Order.objects.filter().get()
             self.assertNotEquals(order.meal, data['meal'])
+
+
+    # def test_ok_show(self):
+    #     with patch('lunch_maker.views.render', new=new_render):
+    #         data = {'meal': 'some meal', 'person': 'some person', 'email': 'some@email.com', 'byn': 1.11, 'byr': 100,
+    #                 'comment': 'qwerty'}
+    #         Order.objects.create(meal=data['meal'], person=data['person'], email=data['email'], byn=data['byn'],
+    #                              byr=data['byr'], comment=data['comment'])
+    #         User.objects.create_superuser(username='admin', password='qwerty123', email='admin@admin.com')
+    #         self.client.login(username='admin', password='qwerty123')
+    #         result = self.client.
+    #         content = json.loads(result.content)
+    #         print content

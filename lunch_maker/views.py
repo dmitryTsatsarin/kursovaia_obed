@@ -30,7 +30,7 @@ def new_order(request):
             d1 = datetime.time(hour=13)
             d2 = datetime.time(hour=15)
             if d1 <= d_now <= d2:
-                mail_admins(u'заказ', u'получен новый заказ', fail_silently=False)
+                mail_admins(u'заказ', u'получен новый заказ')
             Order.objects.create(meal=meal, person=person, email=email, byn=byn, byr=byr, comment=comment)
             return redirect(go_main)
         data = form.errors
@@ -71,7 +71,7 @@ def delete(request):
         except:
             return HttpResponse("выберите заказ из списка")
         send_mail(u'изменения в заказе', u'{0}, ваш заказ удален'.format(order.person),
-                  'testdjango31@gmail.com', ['{0}'.format(order.email)], fail_silently=False)
+                  'testdjango31@gmail.com', ['{0}'.format(order.email)])
         Order.objects.filter(id=delete_id).delete()
         return redirect(show)
     else:
@@ -103,7 +103,7 @@ def change(request):
                 order.comment = data['comment']
                 order.save()
                 send_mail(u'изменения в заказе', u'{0} {1}'.format(order.meal, order.comment),
-                          'testdjango31@gmail.com', ['{0}'.format(order.email)], fail_silently=False)
+                          'testdjango31@gmail.com', ['{0}'.format(order.email)])
                 del request.session['change_id']
                 return redirect(show)
             else:

@@ -20,7 +20,7 @@ def new_render(a, b, c):
 
 class OrderTest(TestCase):
 
-    def tesk_ok_create(self):
+    def test_ok_create(self):
         data = {'meal':'some meal','person':'some person', 'email':'some@email.com', 'byn':1.11, 'byr':100,
                 'comment':'qwerty'}
         self.client.post('/new_order/', data)#как разобраться со временем

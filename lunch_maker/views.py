@@ -31,8 +31,6 @@ def new_order(request):
             d2 = datetime.time(hour=15)
             if d1 <= d_now <= d2:
                 mail_admins(u'заказ', u'получен новый заказ', fail_silently=False)
-            else:
-                return HttpResponse('error, sorry') #что делать со временем раньше 13
             Order.objects.create(meal=meal, person=person, email=email, byn=byn, byr=byr, comment=comment)
             return redirect(go_main)
         data = form.errors
@@ -95,7 +93,7 @@ def change(request):
         if request.session.has_key('change_id'):
             form = OrderForm(request.POST)
             if form.is_valid():
-                data = form.cleaned_data #что можно менять
+                data = form.cleaned_data
                 order = Order.objects.filter(id=request.session.get('change_id')).get()
                 order.meal = data['meal']
                 order.person = data['person']

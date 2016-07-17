@@ -57,7 +57,7 @@ def show(request):
     for i in data:
         if i['byr'] is not None:
             result_byr += i['byr']
-    result = result_byr/10000 + result_byn
+    result = float(result_byr)/10000 + result_byn
     context = {'data':data, 'result_byn':result_byn, 'result_byr':result_byr, 'result':result}
     return render(request, 'show_page.html', context)
 

@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail, mail_admins
 import datetime
+from django.contrib.auth.models import User
 
 # Create your views here.
 
@@ -70,8 +71,9 @@ def delete(request):
             order = Order.objects.filter(id=delete_id).get()
         except:
             return HttpResponse("выберите заказ из списка")
+        admin_mail = User.objects.filter(username='admin', is_superuser=True).get().email
         send_mail(u'изменения в заказе', u'{0}, ваш заказ удален'.format(order.person),
-                  'testdjango31@gmail.com', ['{0}'.format(order.email)])
+                  '{0}'.format(admin_mail), ['{0}'.format(order.email)])
         Order.objects.filter(id=delete_id).delete()
         return redirect(show)
     else:
@@ -102,8 +104,9 @@ def change(request):
                 order.byr = data['byr']
                 order.comment = data['comment']
                 order.save()
+                admin_mail = User.objects.filter(username='admin', is_superuser=True).get().email
                 send_mail(u'изменения в заказе', u'{0} {1}'.format(order.meal, order.comment),
-                          'testdjango31@gmail.com', ['{0}'.format(order.email)])
+                          '{0}'.format(admin_mail), ['{0}'.format(order.email)])
                 del request.session['change_id']
                 return redirect(show)
             else:

@@ -45,8 +45,11 @@ def new_order(request):
             context = {'my_form':OrderForm()}
         return render(request, 'new_order_page.html', context)
 
+
 @login_required(login_url='/accounts/login/')
 def show(request):
+    #здесь я проверяю ключ, т.к. если админ нажмёт изменить данные а потом закроет страницу,
+    #то данные сессии могут остаться и это приведёт к неверному сообщению об ошибке
     if request.session.has_key('change_id'):
         del request.session['change_id']
     data = Order.objects.filter().values()
@@ -84,6 +87,7 @@ def delete(request):
 @login_required(login_url='/accounts/login/')
 def change(request):
     if request.method == "POST":
+        #этот if проверяет выбор элемента для изменения
         if request.POST.get('change'):
             change_id = request.POST.get('change')
             order = Order.objects.filter(id=change_id).get()
@@ -92,6 +96,7 @@ def change(request):
             context = {'my_form':OrderForm(data)}
             request.session['change_id'] = change_id
             return render(request, 'change_page.html', context)
+        #здесь уже происходит само удаление
         if request.session.has_key('change_id'):
             form = OrderForm(request.POST)
             if form.is_valid():

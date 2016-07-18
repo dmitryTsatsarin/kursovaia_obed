@@ -96,7 +96,7 @@ def change(request):
             context = {'my_form':OrderForm(data)}
             request.session['change_id'] = change_id
             return render(request, 'change_page.html', context)
-        #здесь уже происходит само удаление
+        #здесь уже происходит само изменение
         if request.session.has_key('change_id'):
             form = OrderForm(request.POST)
             if form.is_valid():

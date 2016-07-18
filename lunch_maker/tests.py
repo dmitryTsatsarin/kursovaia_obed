@@ -16,6 +16,7 @@ def new_send_mail(a, b, c, d):
 
 
 def new_render(a, b, c):
+    c['data'] = None
     result = json.dumps(c)
     return HttpResponse(result)
 
@@ -73,15 +74,28 @@ class OrderTest(TestCase):
     def test_ok_show(self):
         with patch('lunch_maker.views.render', new=new_render):
             data = {'meal': 'some meal', 'person': 'some person', 'email': 'some@email.com', 'byn': 1.11, 'byr': 100,
-                    'comment': 'qwerty'}
+                    'comment': 'q'}
             Order.objects.create(meal=data['meal'], person=data['person'], email=data['email'], byn=data['byn'],
                                  byr=data['byr'], comment=data['comment'])
+            data1 = {'meal': 'other meal', 'person': 'other person', 'email': 'other@email.com', 'byn': 1.12, 'byr': 200,
+                    'comment': 'w'}
+            Order.objects.create(meal=data1['meal'], person=data1['person'], email=data1['email'], byn=data1['byn'],
+                             byr=data1['byr'], comment=data1['comment'])
 
             User.objects.create_superuser(username='admin', password='qwerty123', email='admin@admin.com')
             self.client.login(username='admin', password='qwerty123')
 
-            #self.client = Client()
-            #url = reverse('show')
             with patch("lunch_maker.views.render", new=new_render):
                 responce = self.client.get("/show/")
-                print responce
+                content = json.loads(responce.content)
+                data = Order.objects.filter()
+                result_BYN = 0
+                result_BYR = 0
+                for i in data:
+                    result_BYN += i.byn
+                    result_BYR += i.byr
+                result = float(result_BYR)/10000 + result_BYN
+                self.assertEquals(result_BYN, content['result_byn'])
+                self.assertEquals(result_BYR, content['result_byr'])
+                self.assertEquals(result, content['result'])
+
